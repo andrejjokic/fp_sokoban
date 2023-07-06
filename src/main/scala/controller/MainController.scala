@@ -50,17 +50,17 @@ class MainController() {
       case _ => new Board(matrix)
   }
 
-  def playSequenceOfMoves(input: String): Component = {
-    def _playSequenceOfMoves(input: String): Component = {
-      IOParser.readCharPerLine(input).map(Converter.toDirection).foreach(dir => move(dir))
-      new Board(matrix)
-    }
-
-    gameState match
-      case GameStates.UNINITIALIZED => EmptyBoard
-      case GameStates.PLAYING => _playSequenceOfMoves(input)
-      case _ => new Board(matrix)
-  }
+//  def playSequenceOfMoves(input: String): Component = {
+//    def _playSequenceOfMoves(input: String): Component = {
+//      IOParser.readCharPerLine(input).map(Converter.toDirection).foreach(dir => move(dir))
+//      new Board(matrix)
+//    }
+//
+//    gameState match
+//      case GameStates.UNINITIALIZED => EmptyBoard
+//      case GameStates.PLAYING => _playSequenceOfMoves(input)
+//      case _ => new Board(matrix)
+//  }
 
   def addRowOrColumn(isRow: Boolean, asFirst: Boolean): Component = {
     (gameState, isRow) match

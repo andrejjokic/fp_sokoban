@@ -4,8 +4,9 @@ import scala.swing.{event, *}
 import controller.MainController
 import view.Board
 import sokoban.App.controller
-import sokoban.common.{Directions, FieldTypes, Position}
+import sokoban.common.{Directions, FieldTypes, GameStates, Position}
 import sokoban.common.FieldTypes.FieldType
+import sokoban.utils.{Converter, IOParser}
 
 import scala.collection.mutable
 import scala.swing.event.{ButtonClicked, Key, KeyPressed, MouseClicked}
@@ -36,8 +37,7 @@ object App extends SimpleSwingApplication {
           reactions += {
             case ButtonClicked(_) => showOpenDialog() match
               case null =>
-              case input: String =>
-                mainFrame.contents = controller.playSequenceOfMoves(input)
+              case input: String => playSequenceOfMoves(input)
           }
         }
 
@@ -278,5 +278,18 @@ object App extends SimpleSwingApplication {
       size = new Dimension(200, 200)
       open()
     }
+  }
+
+  private def playSequenceOfMoves(input: String): Unit = {
+    if (controller.gameState != GameStates.PLAYING) return
+
+    new Thread {
+      override def run(): Unit = {
+        IOParser.readCharPerLine(input).map(Converter.toDirection).foreach(direction => {
+          Thread.sleep(500)
+          top.contents = controller.move(direction)
+        })
+      }
+    }.start()
   }
 }
