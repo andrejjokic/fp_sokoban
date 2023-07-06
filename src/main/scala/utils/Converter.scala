@@ -36,7 +36,15 @@ object Converter {
     'U' -> Directions.UP
   )
 
+  private val directionToChar = mutable.HashMap(
+    Directions.LEFT -> 'L',
+    Directions.DOWN -> 'D',
+    Directions.RIGHT -> 'R',
+    Directions.UP -> 'U'
+  )
+
   def toField(fieldType: FieldType): Field = new Field(fieldTypeToField.getOrElse(fieldType, FieldImage.empty))
   def toFieldType(c: Char): FieldType = charToFieldType.getOrElse(c, FieldTypes.EMPTY)
   def toDirection(c: Char): Direction = charToDirection.getOrElse(c, Directions.UP)
+  def toChar(direction: Direction): Char = directionToChar.getOrElse(direction, 'X')
 }

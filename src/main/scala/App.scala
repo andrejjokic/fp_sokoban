@@ -43,7 +43,7 @@ object App extends SimpleSwingApplication {
 
         contents += new MenuItem("Get solution") {
           reactions += {
-            case ButtonClicked(_) => controller.solve()
+            case ButtonClicked(_) => Dialog.showMessage(this, controller.solve(), "Solution")
           }
         }
       }

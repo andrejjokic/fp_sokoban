@@ -130,9 +130,9 @@ class MainController() {
       case _ => "Map is not loaded."
   }
 
-  def solve(): Unit = {
+  def solve(): String = {
     gameState match
       case GameStates.MAP_LOADED | GameStates.PLAYING => Solver.solve(matrix)
-      case _ => /* nothing */
+      case _ => "Map is not loaded."
   }
 }

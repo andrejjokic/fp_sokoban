@@ -1,6 +1,9 @@
 package sokoban
 package utils
 
+import sokoban.common.Directions.Direction
+
+import java.io.{BufferedWriter, FileWriter, File}
 import scala.io.Source
 
 object IOParser {
@@ -11,6 +14,15 @@ object IOParser {
       lines.toList
     } finally {
       bufferedSource.close()
+    }
+  }
+
+  def write(moves: List[Char], filePath: String): Unit = {
+    val bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)))
+    try {
+      bufferedWriter.write(moves.mkString("\n"))
+    } finally {
+      bufferedWriter.close()
     }
   }
 
