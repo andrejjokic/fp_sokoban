@@ -7,4 +7,7 @@ class Position(val row: Int, val col: Int) {
   override def equals(obj: Any): Boolean = obj match
     case that: Position => row == that.row && col == that.col
     case _ => false
+
+
+  override def toString = s"[$row,$col]"
 }

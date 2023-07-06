@@ -3,11 +3,11 @@ package sokoban
 import scala.swing.{event, *}
 import controller.MainController
 import view.Board
-
 import sokoban.App.controller
-import sokoban.common.{Directions, FieldTypes}
+import sokoban.common.{Directions, FieldTypes, Position}
 import sokoban.common.FieldTypes.FieldType
 
+import scala.collection.mutable
 import scala.swing.event.{ButtonClicked, Key, KeyPressed, MouseClicked}
 
 object App extends SimpleSwingApplication {

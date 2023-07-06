@@ -25,7 +25,8 @@ class Matrix {
     matrix = rows.toArray
   }
 
-  private def init(board: Array[Array[FieldType]]): Matrix = {
+  private def init(board: Array2D): Matrix = {
+    matrix = create(board.length, board(0).length)
     for (i <- board.indices; j <- board(i).indices) update(i, j, board(i)(j))
     this
   }
@@ -66,7 +67,7 @@ class Matrix {
     linearizedPositions.map(get)
   }
 
-  private def linearizedPositions: List[Position] = {
+  def linearizedPositions: List[Position] = {
     val linearized = for (i <- matrix.indices; j <- matrix(i).indices) yield new Position(i, j)
     linearized.toList
   }
@@ -410,6 +411,6 @@ class Matrix {
   }
 
   def copy: Matrix = {
-    new Matrix().init(this.matrix)
+    new Matrix().init(matrix)
   }
 }
