@@ -8,20 +8,13 @@ class MatrixSnapshot(matrix: Matrix) {
 
   private val player = matrix.playerPosition
   private val boxes = matrix.linearizedPositions.filter(isBox(matrix, _))
+  private val stringRepresentation = toString
 
-  override def hashCode(): Int = toString.hashCode
+  override def hashCode(): Int = stringRepresentation.hashCode
 
   override def equals(obj: Any): Boolean = obj match
-    case that: MatrixSnapshot => player == that.player && compareBoxes(that.boxes)
+    case that: MatrixSnapshot => stringRepresentation.equals(that.stringRepresentation)
     case _ => false
-
-  private def compareBoxes(otherBoxes: List[Position]): Boolean = {
-    if (boxes.size != otherBoxes.size) return false
-    boxes.foreach(box => {
-      if (!otherBoxes.exists(_.==(box))) return false
-    })
-    true
-  }
 
   private def isBox(matrix: Matrix, position: Position): Boolean =
     matrix.get(position) == FieldTypes.BOX || matrix.get(position) == FieldTypes.BOX_ON_GOAL
