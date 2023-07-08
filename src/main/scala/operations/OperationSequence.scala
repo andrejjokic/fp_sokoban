@@ -18,7 +18,8 @@ class OperationSequence(val operations: List[Operation]) extends Operation {
           case h :: t => _apply(h(matrix), t)
       }
       catch
-        case _ => matrix
+        case e: OperationException => throw e
+        case _ => throw new OperationException(matrix)
     }
 
     _apply(v1, operations.reverse)

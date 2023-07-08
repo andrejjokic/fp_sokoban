@@ -19,7 +19,7 @@ class OperationComposition(val operations: List[Operation]) extends Operation {
     try
       _apply(v1, operations.reverse)
     catch
-      case _ => v1
+      case _ => throw new OperationException(v1)
   }
 
   def append(g: Operation): OperationComposition = {

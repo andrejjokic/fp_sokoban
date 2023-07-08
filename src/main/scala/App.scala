@@ -7,7 +7,8 @@ import view.Board
 import sokoban.App.controller
 import sokoban.common.{Directions, FieldTypes, GameStates, Position}
 import sokoban.common.FieldTypes.FieldType
-import sokoban.operations.{FilterField, Fractalization, Inversion, MinimizeWalls, OperationComposition, OperationSequence}
+import sokoban.operations.{FilterField, Fractalization, Inversion, MinimizeWalls}
+import sokoban.operations.{OperationComposition, OperationSequence, OperationException}
 import sokoban.utils.{Converter, IOParser}
 
 import scala.collection.mutable
@@ -46,6 +47,20 @@ object App extends SimpleSwingApplication {
         contents += new MenuItem("Get solution") {
           reactions += {
             case ButtonClicked(_) => Dialog.showMessage(this, controller.solve(), "Solution")
+          }
+        }
+
+        contents += new MenuItem("Test sequence") {
+          reactions += {
+            case ButtonClicked(_) =>
+              val sq = new OperationSequence().append(new Inversion).append(new MinimizeWalls)
+              try {
+                mainFrame.contents = new Board(sq(controller.matrix))
+              }
+              catch
+                case e: OperationException =>
+                  mainFrame.contents = new Board(e.matrix)
+                  Dialog.showMessage(this, "One of the operations failed!", "Solution")
           }
         }
       }
