@@ -3,9 +3,11 @@ package sokoban
 import scala.swing.{event, *}
 import controller.MainController
 import view.Board
+
 import sokoban.App.controller
 import sokoban.common.{Directions, FieldTypes, GameStates, Position}
 import sokoban.common.FieldTypes.FieldType
+import sokoban.operations.{FilterField, Fractalization, Inversion, MinimizeWalls, OperationSequence}
 import sokoban.utils.{Converter, IOParser}
 
 import scala.collection.mutable
@@ -44,6 +46,13 @@ object App extends SimpleSwingApplication {
         contents += new MenuItem("Get solution") {
           reactions += {
             case ButtonClicked(_) => Dialog.showMessage(this, controller.solve(), "Solution")
+          }
+        }
+
+        contents += new MenuItem("Test composition") {
+          reactions += {
+            case ButtonClicked(_) =>
+              // mainFrame.contents = new Board(sq(controller.matrix))
           }
         }
       }

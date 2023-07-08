@@ -13,7 +13,7 @@ import scala.reflect.ClassTag
 
 class Matrix {
 
-  type Array2D = Array[Array[FieldType]]
+  private type Array2D = Array[Array[FieldType]]
 
   private var matrix: Array2D = create(0, 0)
   private val movesPlayed = new mutable.Stack[MovePlayed]
