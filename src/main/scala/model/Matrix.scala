@@ -72,8 +72,10 @@ class Matrix {
     linearized.toList
   }
   private def linearizedIndex(row: Int, col: Int) = row * columns + col
-  def positionToLinearizedIndex(position: Position) = linearizedIndex(position.row, position.col)
-  def linearizedIndexToPosition(index: Int) = new Position(index / columns, index % columns)
+
+  def positionToLinearizedIndex(position: Position): Int = linearizedIndex(position.row, position.col)
+
+  def linearizedIndexToPosition(index: Int): Position = new Position(index / columns, index % columns)
 
   def rows: Int = matrix.length
   def columns: Int = matrix.length match
@@ -147,7 +149,7 @@ class Matrix {
     movesPlayed.push(move)
   }
 
-  def combinedFieldType(oldField: FieldType, newField: FieldType): FieldType = {
+  private def combinedFieldType(oldField: FieldType, newField: FieldType): FieldType = {
     (oldField, newField) match
       case (FieldTypes.EMPTY, FieldTypes.PLAYER | FieldTypes.PLAYER_ON_GOAL) => FieldTypes.PLAYER
       case (FieldTypes.EMPTY, FieldTypes.BOX | FieldTypes.BOX_ON_GOAL) => FieldTypes.BOX
@@ -160,7 +162,7 @@ class Matrix {
       case (_, _) => throw new UnsupportedOperationException()
   }
 
-  def directionOffset(direction: Direction): Position = direction match
+  private def directionOffset(direction: Direction): Position = direction match
     case Directions.UP => new Position(-1, 0)
     case Directions.DOWN => new Position(+1, 0)
     case Directions.LEFT => new Position(0, -1)
@@ -220,7 +222,7 @@ class Matrix {
       update(fieldPosition, FieldTypes.EMPTY)
   }
 
-  def getNeighbours(position: Position, maxOffset: Int = 1): List[Position] =
+  private def getNeighbours(position: Position, maxOffset: Int = 1): List[Position] =
     def move(offset: Position) = (offset.row, offset.col) match
       case (0, col) => new Position(0, col + java.lang.Integer.signum(col))
       case (row, 0) => new Position(row + java.lang.Integer.signum(row), 0)
@@ -261,7 +263,10 @@ class Matrix {
       walls.foreach(position => update(position, FieldTypes.WALL))
     }
 
-    if (!isSurroundedByWalls) return
+    if (!isSurroundedByWalls) {
+      return
+    }
+
     updateWalls(outerWalls)
     updateWalls(reachableWalls)
   }
@@ -274,7 +279,7 @@ class Matrix {
     reachableFields.filter(isNotWall)
   }
 
-  def reachableFields: mutable.Set[Int] = {
+  private def reachableFields: mutable.Set[Int] = {
     val discovered = getSet(playerPosition)
     val queue = getQueue(playerPosition)
 
