@@ -6,6 +6,7 @@ import sokoban.common.{Directions, FieldTypes, Position}
 import sokoban.model.Matrix
 
 import scala.annotation.tailrec
+import scala.collection.mutable
 
 class MatrixSnapshot(val matrix: Matrix, val parent: Option[MatrixSnapshot], val parentDirection: Option[Direction])
   extends Ordered[MatrixSnapshot] {
@@ -50,12 +51,49 @@ class MatrixSnapshot(val matrix: Matrix, val parent: Option[MatrixSnapshot], val
   }
 
   private val boxesNotOnGoalsPenalty: Int =
-    boxes.count(isBoxNotOnGoal) * 50
+    boxes.count(isBoxNotOnGoal) * 10
 
   private val boxesToClosestGoalPenalty: Int =
     boxes.filter(isBoxNotOnGoal).map(distanceToClosestGoal).sum
 
   private val cost: Int = boxesNotOnGoalsPenalty + boxesToClosestGoalPenalty
+
+  private val cost2: Int = {
+    def distanceToNearestGoal(box: Position): Int = {
+      goals.map(distance(box, _)).min
+    }
+
+    boxes.filter(isBoxNotOnGoal).map(distanceToClosestGoal).sum
+  }
+
+  private def distance(start: Position, end: Position): Int = {
+    class PositionDistance(val position: Position, val distance: Int) {}
+
+    val visited = mutable.Set[Position]()
+    val queue = mutable.Queue[PositionDistance]()
+
+    @tailrec
+    def _distance(): Int = {
+      if (queue.isEmpty) return Int.MaxValue
+      val current = queue.dequeue()
+      if (current == end) return current.distance
+
+      matrix.getNeighbours(current.position)
+        .filter(matrix.isNotWall)
+        .filterNot(visited)
+        .foreach(neighbour => {
+          queue.enqueue(new PositionDistance(neighbour, current.distance + 1))
+          visited += neighbour
+        })
+
+      _distance()
+    }
+
+    queue.enqueue(new PositionDistance(start, 0))
+    visited += start
+
+    _distance()
+  }
 
   override def compare(that: MatrixSnapshot): Int = -this.cost.compareTo(that.cost)
 }

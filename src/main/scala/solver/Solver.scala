@@ -54,6 +54,8 @@ object Solver {
     val visited = mutable.Set[MatrixSnapshot]()
     val queue = mutable.PriorityQueue[MatrixSnapshot]()
 
+    var cnt = 0
+
     @tailrec
     def _solve(): Option[MatrixSnapshot] = {
       if (queue.isEmpty) return None
@@ -70,6 +72,8 @@ object Solver {
           visited += neighbourSnapshot
           queue.enqueue(neighbourSnapshot)
         }
+
+        cnt += 1
       }
 
       _solve()
@@ -84,6 +88,7 @@ object Solver {
     queue.enqueue(startPos)
 
     val finish = _solve()
+    println(cnt)
 
     if (finish.isDefined) {
       IOParser.write(reconstructPath(finish).map(Converter.toChar), DEFAULT_SOLUTION_PATH)

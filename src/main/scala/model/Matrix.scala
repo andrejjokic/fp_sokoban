@@ -86,7 +86,7 @@ class Matrix {
     matrix.map(row => row.map(f))
   }
 
-  private def isInBounds(position: Position): Boolean =
+  def isInBounds(position: Position): Boolean =
     position.row >= 0
       && position.row < rows
       && position.col >= 0
@@ -222,7 +222,7 @@ class Matrix {
       update(fieldPosition, FieldTypes.EMPTY)
   }
 
-  private def getNeighbours(position: Position, maxOffset: Int = 1): List[Position] =
+  def getNeighbours(position: Position, maxOffset: Int = 1): List[Position] =
     def move(offset: Position) = (offset.row, offset.col) match
       case (0, col) => new Position(0, col + java.lang.Integer.signum(col))
       case (row, 0) => new Position(row + java.lang.Integer.signum(row), 0)
@@ -247,7 +247,7 @@ class Matrix {
     if (isNotInBounds(position)) false
     else get(position) == FieldTypes.WALL
   }
-  private def isNotWall(position: Position): Boolean = !isWall(position)
+  def isNotWall(position: Position): Boolean = !isWall(position)
   private def isNotWall(index: Int): Boolean = isNotWall(linearizedIndexToPosition(index))
 
   private def getQueue(startPosition: Position) = new mutable.Queue[Position]().enqueue(startPosition)

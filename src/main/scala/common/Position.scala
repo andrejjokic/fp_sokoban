@@ -8,6 +8,7 @@ class Position(val row: Int, val col: Int) {
     case that: Position => row == that.row && col == that.col
     case _ => false
 
+  override def hashCode(): Int = toString.hashCode
 
   override def toString = s"[$row,$col]"
 }
